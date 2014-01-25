@@ -1,0 +1,162 @@
+#
+# A Terminal.app friendly powerline theme for Prezto.
+# Based on the Agnoster theme for OMZ.
+#
+# I'm working with colorcodes because the use of %F and %K caused the Terminal.app to render
+# some parts incorrectly, especially if a bright color was involved ie. brblue.
+#
+# Authors:
+#   kevin.bungeneers@gmail.com
+
+# Load dependencies.
+pmodload 'helper'
+
+# Foreground and background code
+fgc="[38"
+bgc="[48"
+
+# Color code        solarized name
+black=";5;000m"     # base02
+red=";5;001m"       # red
+green=";5;002m"     # green
+yellow=";5;003m"    # yellow
+blue=";5;004m"      # blue
+magenta=";5;005m"   # magenta
+cyan=";5;006m"      # cyan
+white=";5;007m"     # base2
+brblack=";5;008m"   # base03
+brred=";5;009m"     # orange
+brgreen=";5;010m"   # base01
+bryellow=";5;011m"  # base00
+brblue=";5;012m"    # base0
+brmagenta=";5;013m" # violet
+brcyan=";5;014m"    # base1
+
+reset="[00m"
+
+CURRENT_BG='NONE'
+
+POWERLINE_SEPARATOR=$'\u2b80'
+POWERLINE_R_SEPARATOR=$'\u2b82'
+
+function prompt_powerline_segment {
+  local bg fg
+  [[ -n $1 ]] && bg="$bgc$1" || bg="%k"
+  [[ -n $2 ]] && fg="$fgc$2" || fg="%f"
+  
+  if [[ $CURRENT_BG != 'NONE' && $1 != $CURRENT_BG ]]; then
+    echo -n " %{$bg$fgc$CURRENT_BG%}$POWERLINE_SEPARATOR%{$fg%} "
+  else
+    echo -n "%{$bg%}%{$fg%} "
+  fi
+  CURRENT_BG=$1
+  [[ -n $3 ]] && echo -n $3
+}
+
+function prompt_powerline_time_segment {
+  prompt_powerline_segment $white $black "`date +%H:%M:%S`"
+}
+
+function prompt_powerline_status_segment {
+  local symbols
+  symbols=()
+  [[ $RETVAL -ne 0 ]] && symbols+="%{$fgc$red%}✘"
+  [[ $UID -eq 0 ]] && symbols+="%{$fgc$yellow%}⚡"
+  [[ $(jobs -l | wc -l) -gt 0 ]] && symbols+="%{$fgc$cyan%}⚙"
+
+  [[ -n "$symbols" ]] && prompt_powerline_segment $black $brblue "$symbols"
+}
+
+
+function prompt_powerline_context_segment {
+  local user=`whoami`
+
+  if [[ "$user" != "$DEFAULT_USER" || -n "$SSH_CLIENT" ]]; then
+    prompt_powerline_segment $black $brblue "%(!.%{$fgc$yellow%}.)$user@%m"
+  fi
+}
+
+function prompt_powerline_dir_segment {
+  prompt_powerline_segment $blue $black '%~'
+}
+
+function prompt_powerline_git_segment {
+  if $git_status; then
+    if [[ ${git_info[dirty]} > 0 ]]; then
+      prompt_powerline_segment $yellow $black "${(e)git_info[prompt]}${git_info[status]}"
+    else
+      prompt_powerline_segment $green $black "${(e)git_info[prompt]}${git_info[status]}"
+    fi
+  fi
+}
+
+# End the prompt, closing any open segments
+prompt_powerline_end_segment() {
+  if [[ -n $CURRENT_BG ]]; then
+    echo -n " %{$bgc$brblack$fgc$CURRENT_BG%}$POWERLINE_SEPARATOR"
+  else
+    echo -n "%{%k%}"
+  fi
+  echo -n "%{%f%}"
+  CURRENT_BG=''
+}
+
+build_prompt() {
+  RETVAL=$?
+  prompt_powerline_time_segment
+  prompt_powerline_status_segment
+  prompt_powerline_context_segment
+  prompt_powerline_dir_segment
+  prompt_powerline_git_segment
+  prompt_powerline_end_segment
+}
+
+function prompt_powerline_precmd {
+  setopt LOCAL_OPTIONS
+  unsetopt XTRACE KSH_ARRAYS
+
+  # Get Git repository information.
+  if (( $+functions[git-info] )); then
+    git_status=git-info
+  fi
+}
+
+function prompt_powerline_setup {
+  setopt LOCAL_OPTIONS
+  unsetopt XTRACE KSH_ARRAYS
+  prompt_opts=(cr percent subst)
+
+  autoload -Uz add-zsh-hook
+
+  add-zsh-hook precmd prompt_powerline_precmd
+
+  zstyle ':prezto:module:editor:info:completing' format "%B%{$fgc$red%}...%f%b"
+  zstyle ':prezto:module:editor:info:keymap:primary' format "%B%{$fgc$cyan%}❯%f%b"
+  zstyle ':prezto:module:editor:info:keymap:primary:overwrite' format "%{$fgc$red%}♺%f"
+  zstyle ':prezto:module:editor:info:keymap:alternate' format "%B%{$fgc$cyan%}❮%f%b"
+  zstyle ':prezto:module:git:info:action' format '! %s'
+  zstyle ':prezto:module:git:info:added' format '✚'
+  zstyle ':prezto:module:git:info:ahead' format '⬆'
+  zstyle ':prezto:module:git:info:behind' format '⬇'
+  zstyle ':prezto:module:git:info:branch' format '⭠ %b'
+  zstyle ':prezto:module:git:info:commit' format '➦ %.7c'
+  zstyle ':prezto:module:git:info:deleted' format '✖'
+  zstyle ':prezto:module:git:info:modified' format '✱'
+  zstyle ':prezto:module:git:info:position' format '%p'
+  zstyle ':prezto:module:git:info:renamed' format '➙'
+  zstyle ':prezto:module:git:info:stashed' format 's'
+  zstyle ':prezto:module:git:info:unmerged' format '═'
+  zstyle ':prezto:module:git:info:untracked' format '?'
+  zstyle ':prezto:module:git:info:dirty' format '%D'
+  zstyle ':prezto:module:git:info:keys' format \
+    'prompt' '$(coalesce "%b" "%p" "%c")%s' \
+    'status' ' %A%B%S%a%d%m%r%U%u' \
+    'dirty'  '%D'
+
+  PROMPT='
+%{%f%b%k%}$(build_prompt)
+  ${editor_info[keymap]} '
+  SPROMPT="zsh: correct %{$fgc$red%}%R%f to %{$fgc$green%}%r%f [nyae]? "
+}
+
+prompt_powerline_setup "$@"
