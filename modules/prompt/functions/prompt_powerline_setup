@@ -134,6 +134,8 @@ function prompt_powerline_setup {
   zstyle ':prezto:module:editor:info:keymap:primary' format "%B%{$fgc$cyan%}❯%f%b"
   zstyle ':prezto:module:editor:info:keymap:primary:overwrite' format "%{$fgc$red%}♺%f"
   zstyle ':prezto:module:editor:info:keymap:alternate' format "%B%{$fgc$cyan%}❮%f%b"
+  
+  zstyle ':prezto:module:git:info' verbose 'yes'
   zstyle ':prezto:module:git:info:action' format '! %s'
   zstyle ':prezto:module:git:info:added' format '✚'
   zstyle ':prezto:module:git:info:ahead' format '⬆'
