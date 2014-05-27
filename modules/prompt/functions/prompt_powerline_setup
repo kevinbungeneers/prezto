@@ -43,7 +43,7 @@ function prompt_powerline_segment {
   local bg fg
   [[ -n $1 ]] && bg="$bgc$1" || bg="%k"
   [[ -n $2 ]] && fg="$fgc$2" || fg="%f"
-  
+
   if [[ $CURRENT_BG != 'NONE' && $1 != $CURRENT_BG ]]; then
     echo -n " %{$bg$fgc$CURRENT_BG%}$POWERLINE_SEPARATOR%{$fg%} "
   else
@@ -72,7 +72,7 @@ function prompt_powerline_context_segment {
   local user=`whoami`
 
   if [[ "$user" != "$DEFAULT_USER" || -n "$SSH_CLIENT" ]]; then
-    prompt_powerline_segment $black $brblue "%(!.%{$fgc$yellow%}.)$user@%m"
+    prompt_powerline_segment $black $white "%(!.%{$fgc$yellow%}.)$user@%m"
   fi
 }
 
@@ -134,7 +134,7 @@ function prompt_powerline_setup {
   zstyle ':prezto:module:editor:info:keymap:primary' format "%B%{$fgc$cyan%}❯%f%b"
   zstyle ':prezto:module:editor:info:keymap:primary:overwrite' format "%{$fgc$red%}♺%f"
   zstyle ':prezto:module:editor:info:keymap:alternate' format "%B%{$fgc$cyan%}❮%f%b"
-  
+
   zstyle ':prezto:module:git:info' verbose 'yes'
   zstyle ':prezto:module:git:info:action' format '! %s'
   zstyle ':prezto:module:git:info:added' format '✚'
