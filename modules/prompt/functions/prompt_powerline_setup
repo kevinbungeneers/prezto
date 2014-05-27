@@ -77,7 +77,7 @@ function prompt_powerline_context_segment {
 }
 
 function prompt_powerline_dir_segment {
-  prompt_powerline_segment $blue $black '%~'
+  prompt_powerline_segment $blue $white '%~'
 }
 
 function prompt_powerline_git_segment {
