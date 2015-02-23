@@ -36,8 +36,8 @@ reset="[00m"
 
 CURRENT_BG='NONE'
 
-POWERLINE_SEPARATOR=$'\u2b80'
-POWERLINE_R_SEPARATOR=$'\u2b82'
+POWERLINE_SEPARATOR=$''
+POWERLINE_R_SEPARATOR=$''
 
 function prompt_powerline_segment {
   local bg fg
@@ -136,13 +136,13 @@ function prompt_powerline_setup {
   zstyle ':prezto:module:editor:info:keymap:alternate' format "%B%{$fgc$cyan%}❮%f%b"
 
   zstyle ':prezto:module:git:info' verbose 'yes'
-  zstyle ':prezto:module:git:info:action' format '! %s'
-  zstyle ':prezto:module:git:info:added' format '✚'
-  zstyle ':prezto:module:git:info:ahead' format '⬆'
-  zstyle ':prezto:module:git:info:behind' format '⬇'
-  zstyle ':prezto:module:git:info:branch' format '⭠ %b'
+  zstyle ':prezto:module:git:info:action' format ' %s'
+  zstyle ':prezto:module:git:info:added' format ''
+  zstyle ':prezto:module:git:info:ahead' format ''
+  zstyle ':prezto:module:git:info:behind' format ''
+  zstyle ':prezto:module:git:info:branch' format ' %b'
   zstyle ':prezto:module:git:info:commit' format '➦ %.7c'
-  zstyle ':prezto:module:git:info:deleted' format '✖'
+  zstyle ':prezto:module:git:info:deleted' format ''
   zstyle ':prezto:module:git:info:modified' format '✱'
   zstyle ':prezto:module:git:info:position' format '%p'
   zstyle ':prezto:module:git:info:renamed' format '➙'
