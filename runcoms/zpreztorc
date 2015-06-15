@@ -10,7 +10,7 @@
 #
 
 # Set case-sensitivity for completion, history lookup, etc.
-# zstyle ':prezto:*:*' case-sensitive 'yes'
+zstyle ':prezto:*:*' case-sensitive 'no'
 
 # Color output (auto set to 'no' on dumb terminals).
 zstyle ':prezto:*:*' color 'yes'
@@ -33,6 +33,9 @@ zstyle ':prezto:load' pmodule \
   'utility' \
   'completion' \
   'git' \
+  'osx' \
+  'syntax-highlighting' \
+  'history-substring-search' \
   'prompt'
 
 #
@@ -86,14 +89,7 @@ zstyle ':prezto:module:editor' key-bindings 'emacs'
 # Set the prompt theme to load.
 # Setting it to 'random' loads a random theme.
 # Auto set to 'off' on dumb terminals.
-zstyle ':prezto:module:prompt' theme 'powerline'
-
-#
-# Ruby
-#
-
-# Auto switch the Ruby version on directory change.
-# zstyle ':prezto:module:ruby:chruby' auto-switch 'yes'
+zstyle ':prezto:module:prompt' theme 'pure'
 
 #
 # Screen
@@ -153,6 +149,3 @@ zstyle ':prezto:module:prompt' theme 'powerline'
 
 # Auto start a session when Zsh is launched in a SSH connection.
 # zstyle ':prezto:module:tmux:auto-start' remote 'yes'
-
-# Integrate with iTerm2.
-# zstyle ':prezto:module:tmux:iterm' integrate 'yes'
